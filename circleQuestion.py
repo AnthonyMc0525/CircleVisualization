@@ -15,15 +15,17 @@ black = (0, 0, 0)
 
 center_pos = [450, 450]
 
-orbit_current_pos = [450 + distance, 0] #x, y
-speed = 100 #speed of the dot in orbit
-orbit_origin_pos = orbit_current_pos 
+orbit_current_pos_x = 450 + distance #x, y
+orbit_current_pos_y = 0 #x, y
+speed = 10 #speed of the dot in orbit
+orbit_origin_pos_x = orbit_current_pos_x 
+orbit_origin_pos_y = orbit_current_pos_y 
 
 
 # create and display objects on the screen
 def draw_window(orbit_current_pos):
     pygame.draw.circle(WIN, white, center_pos , 10)
-    pygame.draw.circle(WIN, white, orbit_current_pos, 10)
+    pygame.draw.circle(WIN, white, [orbit_current_pos_x, orbit_current_pos_y], 10)
     pygame.display.update()
 
 def degreesToRadians(degree):
@@ -32,15 +34,17 @@ def degreesToRadians(degree):
 
 #function to move the orbiting item around the stationary item
 def moveY():
-    global orbit_current_pos
+    global orbit_current_pos_x
+    global orbit_current_pos_y
     #sin == y & cos == x
-    tan = math.tan(orbit_current_pos[1]/orbit_current_pos[0])
+    tan = math.tan(orbit_current_pos_y/orbit_current_pos_x)
     theta = math.acos(degreesToRadians(tan))
-    x = math.cos(theta + degreesToRadians(speed)) * distance 
+    x = math.cos(theta + degreesToRadians(speed)) * distance
     y = math.sin(theta + degreesToRadians(speed)) * distance
-    orbit_current_pos = [x + orbit_origin_pos[0], y + orbit_origin_pos[1]]
-    print("x: " + str(orbit_current_pos[0]))
-    print("y: " + str(orbit_current_pos[1]))
+    orbit_current_pos_x = x + orbit_current_pos_x
+    orbit_current_pos_y = y + orbit_current_pos_y
+    print("x: " + str(orbit_current_pos_x))
+    print("y: " + str(orbit_current_pos_y))
     print("-------------------------------------")
 
 # starting point and contains game loop
@@ -49,12 +53,12 @@ def main():
     run = True
     # main game loop
     while run:
-        draw_window(orbit_current_pos)
+        WIN.fill(black)
+        draw_window([ orbit_current_pos_x, orbit_current_pos_x  ])
         clock.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-        WIN.fill(black)
         moveY() 
         pygame.display.update()
         clock.tick(FPS)
